@@ -6,7 +6,7 @@ import { savePicture } from '../controllers/userController/userSavePictureContro
 import { getPicturesByUser, getPicturesByUserSaved } from '../controllers/userController/userGetController';
 import { removeSavedPicture } from '../controllers/userController/userDeleteController';
 
-import { createPicture } from '../controllers/pictureController/pictureCreateController';
+import { addPictureExternal, createPicture } from '../controllers/pictureController/pictureCreateController';
 import { getPictures, getPictureById, searchPicturesByQuery } from '../controllers/pictureController/pictureGetController';
 import { deletePicture } from '../controllers/pictureController/pictureDeleteController';
 import { updatePicture } from '../controllers/pictureController/pictureUpdateController';
@@ -30,11 +30,13 @@ router.delete('/users/delete-saved-picture', validateTokenHeader, removeSavedPic
 
 router.post('/pictures/', validateTokenHeader, validateCreatePicture, createPicture);
 
+router.post('/pictures/external', validateTokenHeader, addPictureExternal);
+
 router.put('/pictures/:id', validateTokenHeader, updatePicture);
 
 router.delete('/pictures/:id', validateTokenHeader, deletePicture);
 
-router.get('/pictures/', getPictures)
+router.get('/pictures/', getPictures);
 
 router.get('/pictures/:id', getPictureById);
 
