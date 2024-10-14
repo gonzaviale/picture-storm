@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
+import { PictureInterface } from '../types';
 
-const PicturesSchema = new Schema({
+const PicturesSchema = new Schema<PictureInterface>({
   description: { type: String, required: true },
   altDescription: { type: String, required: true },
   color: { type: String, required: true },
@@ -10,4 +11,4 @@ const PicturesSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-export default model('Picture', PicturesSchema);
+export default model<PictureInterface>('Picture', PicturesSchema);

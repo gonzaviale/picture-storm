@@ -4,6 +4,7 @@ import { registerUser } from '../controllers/userController/userRegisterControll
 import { loginUser } from '../controllers/userController/userLoginController';
 import { savePicture } from '../controllers/userController/userSavePictureController';
 import { getPicturesByUser, getPicturesByUserSaved } from '../controllers/userController/userGetController';
+import { removeSavedPicture } from '../controllers/userController/userDeleteController';
 
 import { createPicture } from '../controllers/pictureController/pictureCreateController';
 import { getPictures, getPictureById, searchPicturesByQuery } from '../controllers/pictureController/pictureGetController';
@@ -24,6 +25,8 @@ router.post('/users/save', validateTokenHeader, savePicture);
 router.get('/users/my-pictures', validateTokenHeader, getPicturesByUser);
 
 router.get('/users/my-save-pictures', validateTokenHeader, getPicturesByUserSaved);
+
+router.delete('/users/delete-saved-picture', validateTokenHeader, removeSavedPicture);
 
 router.post('/pictures/', validateTokenHeader, validateCreatePicture, createPicture);
 
