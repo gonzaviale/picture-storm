@@ -7,6 +7,8 @@ import { getPicturesByUser, getPicturesByUserSaved } from '../controllers/userCo
 
 import { createPicture } from '../controllers/pictureController/pictureCreateController';
 import { getPictures, getPictureById, searchPicturesByQuery } from '../controllers/pictureController/pictureGetController';
+import { deletePicture } from '../controllers/pictureController/pictureDeleteController';
+import { updatePicture } from '../controllers/pictureController/pictureUpdateController';
 
 import { validateTokenHeader } from '../middleware/validateTokenHeader';
 import { validateCreatePicture } from '../middleware/validateCreatePicture';
@@ -24,6 +26,10 @@ router.get('/users/my-pictures', validateTokenHeader, getPicturesByUser);
 router.get('/users/my-save-pictures', validateTokenHeader, getPicturesByUserSaved);
 
 router.post('/pictures/', validateTokenHeader, validateCreatePicture, createPicture);
+
+router.put('/pictures/:id', validateTokenHeader, updatePicture);
+
+router.delete('/pictures/:id', validateTokenHeader, deletePicture);
 
 router.get('/pictures/', getPictures)
 
