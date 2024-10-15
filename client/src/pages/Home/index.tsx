@@ -1,21 +1,44 @@
 import React, { useEffect, useState } from 'react';
+import { Picture } from '../../types';
+import { fetchPictures } from '../../api/pictureApi';
+import { addPictureToSaved } from '../../api/userApi';
+import { BookmarkIcon } from '@heroicons/react/24/solid';
+import Swal from 'sweetalert2';
+import PictureCard from '../../components/PictureCard';
+import Pagination from '../../components/Pagination';
 import Header from '../../layout/Header';
 import HeroImage from '../../components/HeroImage';
 import MoreAndCreateButtons from '../../components/MoreAndCreateButtons';
-import { Picture } from '../../types';
-import { fetchPictures } from '../../api/pictureApi';
-import { BookmarkIcon } from '@heroicons/react/24/solid';
-import Swal from 'sweetalert2';
-import { addPictureToSaved } from '../../api/userApi';
 
 const Home: React.FC = () => {
-
     const [searchText, setSearchText] = useState<string>('');
     const [filteredPictures, setFilteredPictures] = useState<Picture[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [picturesPerPage] = useState<number>(3);
+    const [selectedPicture, setSelectedPicture] = useState<Picture | null>(null);
 
     const handleChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchText(event.target.value);
     };
+
+    const handleSave = async (pictureId: string) => {
+        try {
+            const token = sessionStorage.getItem('token');
+            if (token) {
+                await addPictureToSaved(pictureId);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Imagen Agregada a Favoritas',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }
+        } catch (error) {
+            console.error('Error saving picture:', error);
+        }
+    };
+
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     useEffect(() => {
         const fetchInitialPictures = async () => {
@@ -36,26 +59,14 @@ const Home: React.FC = () => {
             if (searchText.length === 0) {
                 setFilteredPictures(picturesSearch);
             }
+            setCurrentPage(1);
         };
         fetchSearchPictures();
     }, [searchText]);
 
-    const handleSave = async (pictureId: string) => {
-        try {
-            const token = sessionStorage.getItem('token');
-            if (token) {
-                await addPictureToSaved(pictureId);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Imagen Agregada a Favoritas',
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            }
-        } catch (error) {
-            console.error('Error saving picture:', error);
-        }
-    };
+    const indexOfLastPicture = currentPage * picturesPerPage;
+    const indexOfFirstPicture = indexOfLastPicture - picturesPerPage;
+    const currentPictures = filteredPictures.slice(indexOfFirstPicture, indexOfLastPicture);
 
     return (
         <>
@@ -84,12 +95,13 @@ const Home: React.FC = () => {
                         className="mt-8 w-full transition-opacity duration-500 px-4 md:px-8"
                     >
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                            {filteredPictures.map((picture) => (
+                            {currentPictures.map((picture) => (
                                 <div key={picture._id} className="bg-white/50 p-2 rounded-lg shadow-md zoom">
                                     <img
                                         src={picture.image}
                                         alt={picture.description}
                                         className="w-full h-36 object-cover rounded-md cursor-pointer"
+                                        onClick={() => setSelectedPicture(picture)}
                                     />
                                     <div className="flex flex-row justify-between items-center">
                                         <p className="text-black font-semibold mt-3 text-normal">
@@ -108,9 +120,21 @@ const Home: React.FC = () => {
                             ))}
 
                         </div>
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPictures={filteredPictures.length}
+                            picturesPerPage={picturesPerPage}
+                            paginate={paginate}
+                        />
                     </div>
                 </div>
             </div>
+            {selectedPicture && (
+                <PictureCard
+                    picture={selectedPicture}
+                    setSelectedPicture={setSelectedPicture}
+                />
+            )}
         </>
     );
 };

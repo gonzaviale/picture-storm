@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { fetchUserPictures } from "../../api/userApi";
 import { Picture } from "../../types";
+import Pagination from "../../components/Pagination";
 import { TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
 import { deletePicture, fetchPictureiD } from "../../api/pictureApi";
 import UpdatePicture from "../UpdatePicture";
+import PictureCard from "../../components/PictureCard";
 import HeroImage from "../../components/HeroImage";
 import Header from "../../layout/Header";
 
 const MyPictures: React.FC = () => {
   const [pictures, setPictures] = useState<Picture[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [picturesPerPage] = useState<number>(3);
   const [selectedPicture, setSelectedPicture] = useState<Picture | null>(null);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
 
@@ -20,6 +24,7 @@ const MyPictures: React.FC = () => {
         if (token) {
           const fetchedPictures = await fetchUserPictures();
           setPictures(fetchedPictures);
+          setCurrentPage(1);
         }
       } catch (error) {
         console.error("Error fetching pictures:", error);
@@ -27,6 +32,12 @@ const MyPictures: React.FC = () => {
     };
     fetchPictures();
   }, []);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const indexOfLastPicture = currentPage * picturesPerPage;
+  const indexOfFirstPicture = indexOfLastPicture - picturesPerPage;
+  const currentPictures = pictures.slice(indexOfFirstPicture, indexOfLastPicture);
 
   const handleDelete = async (pictureId: string) => {
     try {
@@ -85,7 +96,7 @@ const MyPictures: React.FC = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 w-full max-w-7xl">
-                  {pictures.map((picture) => (
+                  {currentPictures.map((picture) => (
                     <div
                       key={picture._id}
                       className="bg-white/50 p-2 rounded-lg shadow-md zoom"
@@ -125,10 +136,25 @@ const MyPictures: React.FC = () => {
                   ))}
                 </div>
               )}
+
+              {pictures.length > picturesPerPage && (
+                <Pagination
+                  currentPage={currentPage}
+                  totalPictures={pictures.length}
+                  picturesPerPage={picturesPerPage}
+                  paginate={paginate}
+                />
+              )}
             </>
           )}
         </div>
       </div>
+      {selectedPicture && !isUpdateMode && (
+        <PictureCard
+          picture={selectedPicture}
+          setSelectedPicture={setSelectedPicture}
+        />
+      )}
     </>
   );
 

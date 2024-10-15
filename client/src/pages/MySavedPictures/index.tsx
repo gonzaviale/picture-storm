@@ -1,14 +1,19 @@
 import { fetchUserSavedPictures, removeSavedPicture } from "../../api/userApi";
 import { Picture } from "../../types";
 import React, { useEffect, useState } from "react";
+import Pagination from "../../components/Pagination";
 import { TrashIcon } from '@heroicons/react/24/solid';
 import Swal from 'sweetalert2';
+import PictureCard from "../../components/PictureCard";
 import HeroImage from "../../components/HeroImage";
 import Header from "../../layout/Header";
 
 
 const MySavedPictures: React.FC = () => {
   const [pictures, setPictures] = useState<Picture[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [picturesPerPage] = useState<number>(3);
+  const [selectedPicture, setSelectedPicture] = useState<Picture | null>(null);
 
   useEffect(() => {
     const fetchPictures = async () => {
@@ -35,10 +40,18 @@ const MySavedPictures: React.FC = () => {
       console.error("Error deleting picture:", error);
     }
   };
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const indexOfLastPicture = currentPage * picturesPerPage;
+  const indexOfFirstPicture = indexOfLastPicture - picturesPerPage;
+  const currentPictures = pictures.slice(indexOfFirstPicture, indexOfLastPicture);
+
   return (
     <>
       <div>
         <HeroImage />
+
         <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-white">
           <Header />
           <h1 className="text-4xl font-bold mb-4 mt-20 animate-fade-in-down">Favoritas</h1>
@@ -49,7 +62,7 @@ const MySavedPictures: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 w-full max-w-7xl">
-              {pictures.map((picture) => (
+              {currentPictures.map((picture) => (
                 <div
                   key={picture._id}
                   className="bg-white/50 p-2 rounded-lg shadow-md zoom"
@@ -57,6 +70,7 @@ const MySavedPictures: React.FC = () => {
                   <img
                     src={picture.image}
                     alt={picture.description}
+                    onClick={() => setSelectedPicture(picture)}
                     className="w-full h-36 object-cover rounded-md cursor-pointer"
                   />
                   <div className="flex flex-row justify-between items-center mt-3">
@@ -87,8 +101,22 @@ const MySavedPictures: React.FC = () => {
               ))}
             </div>
           )}
+          {pictures.length > picturesPerPage && (
+            <Pagination
+              currentPage={currentPage}
+              totalPictures={pictures.length}
+              picturesPerPage={picturesPerPage}
+              paginate={paginate}
+            />
+          )}
         </div>
       </div>
+      {selectedPicture && (
+        <PictureCard
+          picture={selectedPicture}
+          setSelectedPicture={setSelectedPicture}
+        />
+      )}
     </>
   );
 };
