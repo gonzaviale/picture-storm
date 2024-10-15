@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 import { createPicture } from "../../api/pictureApi";
-import ProfileIcon from "../../layout/Header";
+import Header from "../../layout/Header";
 import React, { useState } from "react";
 import HeroImage from "../../components/HeroImage";
 
@@ -41,7 +41,7 @@ const CreatePicture: React.FC = () => {
                 <div className="relative w-full h-screen bg-gray-200 overflow-hidden">
                     <HeroImage />
                     <div className="relative z-10 flex flex-col items-center justify-center h-full text-white">
-                        <ProfileIcon />
+                        <Header />
                         <div className="max-w-2xl w-full bg-white/50 rounded-3xl shadow-xl p-8 overflow-y-auto max-h-screen">
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <textarea

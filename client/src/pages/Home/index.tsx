@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ProfileIcon from '../../layout/Header';
+import Header from '../../layout/Header';
 import HeroImage from '../../components/HeroImage';
 import MoreAndCreateButtons from '../../components/MoreAndCreateButtons';
 import { Picture } from '../../types';
@@ -49,7 +49,7 @@ const Home: React.FC = () => {
                         id="exploreMoreSection"
                         className="mt-8 w-full transition-opacity duration-500 px-4 md:px-8"
                     >
-                        <ProfileIcon />
+                        <Header />
                     </div>
                     <h1 className="text-4xl font-bold mb-4 mt-20 animate-fade-in-down">Picture Storm</h1>
                     <p className="text-base mb-6">Capture, explore y guarde momentos hermosos</p>

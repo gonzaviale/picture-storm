@@ -3,7 +3,7 @@ import { HomeIcon } from "@heroicons/react/24/solid";
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
-const ProfileIcon: React.FC = () => {
+const Header: React.FC = () => {
 
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -75,4 +75,4 @@ const ProfileIcon: React.FC = () => {
     );
 };
 
-export default ProfileIcon;
+export default Header;
