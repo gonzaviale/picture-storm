@@ -8,3 +8,8 @@ export interface PictureInterface {
     createdAt: Date;
   }
   
+
+  export interface PictureResponse {
+    savedPictures: any[];
+    totalCount: number;
+  }
