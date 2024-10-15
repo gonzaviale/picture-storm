@@ -1,9 +1,27 @@
 import Picture from "../models/Picture";
 import User from "../models/User";
+import { PaginateResponse } from "../types";
 
-export default async function getSavedPicturesForUserService(username: string) {
+const getSavedPicturesForUser = async (page: number, username: string) : Promise<PaginateResponse> => {
+    const startIndex = (page - 1) * 3;
+    const endIndex = page * 3;
+
     const user = await User.findOne({ username });
-    if (!user) return [];
-    const savedPictures = await Picture.find({ _id: { $in: user.savedPictures } });
-    if (savedPictures) return savedPictures || [];
+
+    if(!user) {
+        throw new Error("User not found");
+    }
+
+    const savedPictures = user.savedPictures.slice(startIndex, endIndex);
+
+    const pictures = await Picture.find({ _id: { $in: savedPictures } });
+
+    return {
+        pictures: pictures,
+        totalCount: user.savedPictures.length,
+        currentPage: page,
+        totalPages: Math.ceil(user.savedPictures.length / 3)
+    };
 }
+
+export default getSavedPicturesForUser;
