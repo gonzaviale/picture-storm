@@ -1,8 +1,18 @@
-import React from "react";
+import { UserIcon } from "@heroicons/react/24/outline";
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 const ProfileIcon: React.FC = () => {
+
+    const [showDropdown, setShowDropdown] = useState<boolean>(false);
      const navigate = useNavigate();
+
+     const logout = () => {
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('username');
+        setShowDropdown(false); 
+        navigate('/login');
+    };
 
     return (
         <div className="absolute top-4 right-4 flex items-center z-10">
@@ -13,6 +23,40 @@ const ProfileIcon: React.FC = () => {
                 >
                     Iniciar Sesión
                 </button>
+            )}
+                        {sessionStorage.getItem('token') && (
+                <div className="relative">
+                    <button
+                        onClick={() => setShowDropdown(!showDropdown)}
+                        className="p-2"
+                    >
+                        <UserIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                    </button>
+                    {showDropdown && (
+                        <div 
+                            className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-20"
+                        >
+                            <button 
+                                className="block px-4 py-2 text-sm text-black rounded-lg hover:bg-gray-200 w-full text-left"
+                                onClick={() => navigate('/saved-pictures')}
+                            >
+                                Favoritas
+                            </button>
+                            <button 
+                                className="block px-4 py-2 text-sm text-black rounded-lg hover:bg-gray-200 w-full text-left" 
+                                onClick={() => logout()}
+                            >
+                                Cerrar Sesión
+                            </button>
+                            <button 
+                                className="block px-4 py-2 text-sm text-black rounded-lg hover:bg-gray-200 w-full text-left" 
+                                onClick={() => navigate('/my-pictures')}
+                            >
+                                Mis Imagenes
+                            </button>
+                        </div>
+                    )}
+                </div>
             )}
         </div>
     );
