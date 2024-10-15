@@ -12,3 +12,13 @@ export const fetchPictures = async (): Promise<Picture[]> => {
     throw new Error("Error fetching pictures");
   }
 };
+
+export const createPicture = async (picture: Picture): Promise<Picture> => {
+  try {
+    const response = await axios.post(`${PICTURES_URL}`, { ...picture });
+    return response.data as Promise<Picture>;
+  } catch (error) {
+    console.error("Error creating picture:", error);
+    throw new Error("Error creating picture");
+  }
+}
