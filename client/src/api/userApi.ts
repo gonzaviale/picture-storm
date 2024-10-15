@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Picture, User } from '../types';
+import { PaginateResponse, Picture, User } from '../types';
 
 const userRegisterURL = import.meta.env.VITE_USERS_REGISTER;
 const userPicturesURL = import.meta.env.VITE_USERS_API_PICTURES;
@@ -29,10 +29,10 @@ export const loginUser = async (user: { email: string; password: string }): Prom
   }
 }
 
-export const fetchUserPictures = async (): Promise<Picture[]> => {
+export const fetchUserPictures = async (page: number): Promise<PaginateResponse> => {
   try {
-    const response = await axios.get(`${userPicturesURL}`);
-    return response.data as Promise<Picture[]>;
+    const response = await axios.get(`${userPicturesURL}?page=${page}`);
+    return response.data as Promise<PaginateResponse>;
   } catch (error) {
     console.error("Error fetching user pictures:", error);
     throw new Error("Error fetching user pictures");

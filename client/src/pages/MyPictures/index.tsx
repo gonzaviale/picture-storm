@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchUserPictures } from "../../api/userApi";
-import { Picture } from "../../types";
+import { PaginateResponse, Picture } from "../../types";
 import Pagination from "../../components/Pagination";
 import { TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
 import Swal from "sweetalert2";
@@ -12,20 +12,16 @@ import Header from "../../layout/Header";
 
 const MyPictures: React.FC = () => {
   const [pictures, setPictures] = useState<Picture[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [picturesPerPage] = useState<number>(3);
   const [selectedPicture, setSelectedPicture] = useState<Picture | null>(null);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [paginationResponse, setPaginationResponse] = useState<PaginateResponse | null>(null);
 
   useEffect(() => {
     const fetchPictures = async () => {
       try {
-        const token = sessionStorage.getItem("token");
-        if (token) {
-          const fetchedPictures = await fetchUserPictures();
-          setPictures(fetchedPictures);
-          setCurrentPage(1);
-        }
+        const fetchedPictures = await fetchUserPictures(1);
+        setPictures(fetchedPictures.pictures);
+        setPaginationResponse(fetchedPictures);
       } catch (error) {
         console.error("Error fetching pictures:", error);
       }
@@ -33,11 +29,15 @@ const MyPictures: React.FC = () => {
     fetchPictures();
   }, []);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  const indexOfLastPicture = currentPage * picturesPerPage;
-  const indexOfFirstPicture = indexOfLastPicture - picturesPerPage;
-  const currentPictures = pictures.slice(indexOfFirstPicture, indexOfLastPicture);
+  const paginate = async (pageNumber: number) => {
+    try {
+      const fetchedPictures = await fetchUserPictures(pageNumber);
+      setPictures(fetchedPictures.pictures);
+      setPaginationResponse(fetchedPictures);
+    } catch (error) {
+      console.error("Error fetching pictures:", error);
+    }
+  };
 
   const handleDelete = async (pictureId: string) => {
     try {
@@ -96,7 +96,7 @@ const MyPictures: React.FC = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 w-full max-w-7xl">
-                  {currentPictures.map((picture) => (
+                  {pictures.map((picture) => (
                     <div
                       key={picture._id}
                       className="bg-white/50 p-2 rounded-lg shadow-md zoom"
@@ -136,15 +136,12 @@ const MyPictures: React.FC = () => {
                   ))}
                 </div>
               )}
-
-              {pictures.length > picturesPerPage && (
-                <Pagination
-                  currentPage={currentPage}
-                  totalPictures={pictures.length}
-                  picturesPerPage={picturesPerPage}
-                  paginate={paginate}
-                />
-              )}
+              <Pagination
+                currentPage={paginationResponse?.currentPage || 1}
+                totalPictures={paginationResponse?.totalCount || 0}
+                picturesPerPage={3}
+                paginate={paginate}
+              />
             </>
           )}
         </div>

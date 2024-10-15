@@ -32,3 +32,10 @@ export interface BigPictureCardProps {
   picturesPerPage: number;
   paginate: (pageNumber: number) => void;
 }
+
+export interface PaginateResponse {
+  pictures: Picture[];
+  totalCount: number;
+  currentPage: number;
+  totalPages: number;
+}
