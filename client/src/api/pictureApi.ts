@@ -31,3 +31,23 @@ export const deletePicture = async (id: string): Promise<void> => {
     throw new Error("Error deleting picture");
   }
 };
+
+export const updatePicture = async (id: string, picture: Picture): Promise<Picture> => {
+  try {
+    const response = await axios.put(`${PICTURES_URL}/${id}`, { ...picture });
+    return response.data as Promise<Picture>;
+  } catch (error) {
+    console.error("Error updating picture:", error);
+    throw new Error("Error updating picture");
+  }
+};
+
+export const fetchPictureiD = async (id: string): Promise<Picture> => {
+  try {
+    const response = await axios.get(`${PICTURES_URL}/${id}`);
+    return response.data as Promise<Picture>;
+  } catch (error) {
+    console.error("Error fetching picture:", error);
+    throw new Error("Error fetching picture");
+  }
+};
