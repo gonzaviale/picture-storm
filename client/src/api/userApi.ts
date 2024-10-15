@@ -4,6 +4,7 @@ import { Picture, User } from '../types';
 const userRegisterURL = import.meta.env.VITE_USERS_REGISTER;
 const userPicturesURL = import.meta.env.VITE_USERS_API_PICTURES;
 const userLoginURL = import.meta.env.VITE_USERS_LOGIN;
+const userSavePictureURL = import.meta.env.VITE_USERS_SAVE_PICTURE;
 
 export const registerUser = async (user: User): Promise<void> => {
   try {
@@ -26,12 +27,21 @@ export const loginUser = async (user: { email: string; password: string }): Prom
   }
 }
 
-export const  fetchUserPictures = async (): Promise<Picture[]> => {
-  try{
+export const fetchUserPictures = async (): Promise<Picture[]> => {
+  try {
     const response = await axios.get(`${userPicturesURL}`);
     return response.data as Promise<Picture[]>;
   } catch (error) {
     console.error("Error fetching user pictures:", error);
     throw new Error("Error fetching user pictures");
+  }
+}
+
+export const addPictureToSaved = async (pictureId: string): Promise<void> => {
+  try {
+    await axios.post(`${userSavePictureURL}`, { pictureId });
+  } catch (error) {
+    console.error("Error adding picture to saved:", error);
+    throw new Error("Error adding picture to saved");
   }
 }

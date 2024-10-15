@@ -5,6 +5,8 @@ import MoreAndCreateButtons from '../../components/MoreAndCreateButtons';
 import { Picture } from '../../types';
 import { fetchPictures } from '../../api/pictureApi';
 import { BookmarkIcon } from '@heroicons/react/24/solid';
+import Swal from 'sweetalert2';
+import { addPictureToSaved } from '../../api/userApi';
 
 const Home: React.FC = () => {
 
@@ -38,7 +40,22 @@ const Home: React.FC = () => {
         fetchSearchPictures();
     }, [searchText]);
 
-
+    const handleSave = async (pictureId: string) => {
+        try {
+            const token = sessionStorage.getItem('token');
+            if (token) {
+                await addPictureToSaved(pictureId);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Imagen Agregada a Favoritas',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }
+        } catch (error) {
+            console.error('Error saving picture:', error);
+        }
+    };
 
     return (
         <>
@@ -82,6 +99,7 @@ const Home: React.FC = () => {
                                         </p>
                                         <button
                                             className="mt-3 flex items-center justify-center bg-blue-500 text-white w-10 h-10 rounded-lg hover:bg-blue-600 transition duration-300"
+                                            onClick={() => handleSave(picture._id as string)}
                                         >
                                             <BookmarkIcon className="w-5 h-5" />
                                         </button>
