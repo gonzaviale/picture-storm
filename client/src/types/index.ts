@@ -10,3 +10,9 @@ export interface Picture {
     createdAt?: Date;
   }
   
+
+  export interface User {
+    username: string;
+    email: string;
+    password: string;
+  }

@@ -1,6 +1,17 @@
 import axios from 'axios';
+import { User } from '../types';
 
+const userRegisterURL = import.meta.env.VITE_USERS_REGISTER;
 const userLoginURL = import.meta.env.VITE_USERS_LOGIN;
+
+export const registerUser = async (user: User): Promise<void> => {
+  try {
+    await axios.post(`${userRegisterURL}`, user);
+  } catch (error) {
+    console.error("Error register user:", error);
+    throw new Error("Error register user");
+  }
+}
 
 export const loginUser = async (user: { email: string; password: string }): Promise<string> => {
   try {
