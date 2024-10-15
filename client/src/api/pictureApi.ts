@@ -2,6 +2,8 @@ import { Picture } from '../types';
 import axios from 'axios';
 
 const PICTURES_URL = import.meta.env.VITE_PICTURES_API;
+const PICTURES_URL_EXTERNAL = import.meta.env.VITE_PICTURES_API_SEARCH_EXTERNAL;
+const PICTURES_URL_EXTERNAL_ADD = import.meta.env.VITE_PICTURES_API_ADD_EXTERNAL;
 
 export const fetchPictures = async (): Promise<Picture[]> => {
   try {
@@ -51,3 +53,23 @@ export const fetchPictureiD = async (id: string): Promise<Picture> => {
     throw new Error("Error fetching picture");
   }
 };
+
+export const searchExternalPictures = async (query: string): Promise<Picture[]> => {
+  try {
+    const response = await axios.get(`${PICTURES_URL_EXTERNAL}?query=${query}`);
+    return response.data as Promise<Picture[]>;
+  } catch (error) {
+    console.error("Error searching external pictures:", error);
+    throw new Error("Error searching external pictures");
+  }
+}
+
+export const addPictureExternal = async (id: string): Promise<Picture> => {
+  try {
+    const response = await axios.post(`${PICTURES_URL_EXTERNAL_ADD}`, { id: String(id), });
+    return response.data as Promise<Picture>;
+  } catch (error) {
+    console.error("Error adding picture from external API:", error);
+    throw new Error("Error adding picture from external API");
+  }
+}
