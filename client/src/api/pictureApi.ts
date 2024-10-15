@@ -22,3 +22,12 @@ export const createPicture = async (picture: Picture): Promise<Picture> => {
     throw new Error("Error creating picture");
   }
 }
+
+export const deletePicture = async (id: string): Promise<void> => {
+  try {
+    await axios.delete(`${PICTURES_URL}/${id}`);
+  } catch (error) {
+    console.error("Error deleting picture:", error);
+    throw new Error("Error deleting picture");
+  }
+};

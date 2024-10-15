@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { User } from '../types';
+import { Picture, User } from '../types';
 
 const userRegisterURL = import.meta.env.VITE_USERS_REGISTER;
+const userPicturesURL = import.meta.env.VITE_USERS_API_PICTURES;
 const userLoginURL = import.meta.env.VITE_USERS_LOGIN;
 
 export const registerUser = async (user: User): Promise<void> => {
@@ -22,5 +23,15 @@ export const loginUser = async (user: { email: string; password: string }): Prom
   } catch (error) {
     console.error("Error login user:", error);
     throw new Error("Error login user");
+  }
+}
+
+export const  fetchUserPictures = async (): Promise<Picture[]> => {
+  try{
+    const response = await axios.get(`${userPicturesURL}`);
+    return response.data as Promise<Picture[]>;
+  } catch (error) {
+    console.error("Error fetching user pictures:", error);
+    throw new Error("Error fetching user pictures");
   }
 }
