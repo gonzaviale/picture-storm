@@ -7,6 +7,7 @@ import CreatePicture from './pages/CreatePicture';
 import './axiosConfig';
 import MyPictures from './pages/MyPictures';
 import ProtectedRoute from './components/ProtectedRoute';
+import MySavedPictures from './pages/MySavedPictures';
 
 const App: React.FC = () => {
 
@@ -20,6 +21,7 @@ const App: React.FC = () => {
         <Route element={<ProtectedRoute />}>
         <Route path='/create-picture' element={<CreatePicture />}/>
         <Route path='/my-pictures' element={<MyPictures />}/>
+        <Route path='/saved-pictures' element={<MySavedPictures />}/>
         </Route>
       </Routes>
     </Router>

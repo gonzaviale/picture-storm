@@ -5,6 +5,8 @@ const userRegisterURL = import.meta.env.VITE_USERS_REGISTER;
 const userPicturesURL = import.meta.env.VITE_USERS_API_PICTURES;
 const userLoginURL = import.meta.env.VITE_USERS_LOGIN;
 const userSavePictureURL = import.meta.env.VITE_USERS_SAVE_PICTURE;
+const userDeleteSavedPictureURL = import.meta.env.VITE_USERS_DELETE_SAVE_PICTURE;
+const userSavedPicturesURL = import.meta.env.VITE_USERS_API_PICTURES_SAVED;
 
 export const registerUser = async (user: User): Promise<void> => {
   try {
@@ -43,5 +45,24 @@ export const addPictureToSaved = async (pictureId: string): Promise<void> => {
   } catch (error) {
     console.error("Error adding picture to saved:", error);
     throw new Error("Error adding picture to saved");
+  }
+}
+
+export const removeSavedPicture = async (pictureId: string): Promise<void> => {
+  try {
+    await axios.delete(`${userDeleteSavedPictureURL}`, { data: { pictureId } });
+  } catch (error) {
+    console.error("Error removing picture from saved:", error);
+    throw new Error("Error removing picture from saved");
+  }
+}
+
+export const fetchUserSavedPictures = async (): Promise<Picture[]> => {
+  try {
+    const response = await axios.get(`${userSavedPicturesURL}`);
+    return response.data as Promise<Picture[]>;
+  } catch (error) {
+    console.error("Error fetching user saved pictures:", error);
+    throw new Error("Error fetching user saved pictures");
   }
 }
