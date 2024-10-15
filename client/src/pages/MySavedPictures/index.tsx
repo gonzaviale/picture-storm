@@ -1,5 +1,5 @@
 import { fetchUserSavedPictures, removeSavedPicture } from "../../api/userApi";
-import { Picture } from "../../types";
+import { PaginateResponse, Picture } from "../../types";
 import React, { useEffect, useState } from "react";
 import Pagination from "../../components/Pagination";
 import { TrashIcon } from '@heroicons/react/24/solid';
@@ -11,8 +11,7 @@ import Header from "../../layout/Header";
 
 const MySavedPictures: React.FC = () => {
   const [pictures, setPictures] = useState<Picture[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [picturesPerPage] = useState<number>(3);
+  const [paginationResponse, setPaginationResponse] = useState<PaginateResponse | null>(null);
   const [selectedPicture, setSelectedPicture] = useState<Picture | null>(null);
 
   useEffect(() => {
@@ -20,8 +19,9 @@ const MySavedPictures: React.FC = () => {
       try {
         const token = sessionStorage.getItem("token");
         if (token) {
-          const fetchedPictures = await fetchUserSavedPictures();
-          setPictures(fetchedPictures);
+          const fetchedPictures = await fetchUserSavedPictures(1);
+          setPictures(fetchedPictures.pictures);
+          setPaginationResponse(fetchedPictures);
         }
       } catch (error) {
         console.error("Error fetching pictures:", error);
@@ -41,11 +41,15 @@ const MySavedPictures: React.FC = () => {
     }
   };
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  const indexOfLastPicture = currentPage * picturesPerPage;
-  const indexOfFirstPicture = indexOfLastPicture - picturesPerPage;
-  const currentPictures = pictures.slice(indexOfFirstPicture, indexOfLastPicture);
+  const paginate = async (pageNumber: number) => {
+    try {
+      const fetchedPictures = await fetchUserSavedPictures(pageNumber);
+      setPictures(fetchedPictures.pictures);
+      setPaginationResponse(fetchedPictures);
+    } catch (error) {
+      console.error("Error fetching pictures:", error);
+    }
+  };
 
   return (
     <>
@@ -62,7 +66,7 @@ const MySavedPictures: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 w-full max-w-7xl">
-              {currentPictures.map((picture) => (
+              {pictures.map((picture) => (
                 <div
                   key={picture._id}
                   className="bg-white/50 p-2 rounded-lg shadow-md zoom"
@@ -101,14 +105,12 @@ const MySavedPictures: React.FC = () => {
               ))}
             </div>
           )}
-          {pictures.length > picturesPerPage && (
-            <Pagination
-              currentPage={currentPage}
-              totalPictures={pictures.length}
-              picturesPerPage={picturesPerPage}
-              paginate={paginate}
-            />
-          )}
+          <Pagination
+            currentPage={paginationResponse?.currentPage || 1}
+            totalPictures={paginationResponse?.totalCount || 0}
+            picturesPerPage={3}
+            paginate={paginate}
+          />
         </div>
       </div>
       {selectedPicture && (
