@@ -18,7 +18,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => response,
   error => {
-    if (error.response.status === 401) {
+    if (error.response.status === 401 || error.response.status === 400) {
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('username');
       Swal.fire({
