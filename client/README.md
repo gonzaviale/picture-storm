@@ -20,6 +20,20 @@ Frontend desarrollado en **React** y **Vite** con **TypeScript**, donde los usua
    ```bash
    npm install
    ```
+3. Crea un archivo `.env` en la raiz del proyecto con las siguientes variables de entorno
+  ```plaintext
+  VITE_PICTURES_API="http://localhost:3000/api/pictures"
+  VITE_PICTURES_API_SEARCH_EXTERNAL="http://localhost:3000/api/pictures/unsplash-service/search"
+  VITE_PICTURES_API_ADD_EXTERNAL="http://localhost:3000/api/pictures/external"
+
+  VITE_USERS_API_PICTURES="http://localhost:3000/api/users/my-pictures"
+  VITE_USERS_API_PICTURES_SAVED="http://localhost:3000/api/users/my-save-pictures"
+  VITE_USERS_LOGIN="http://localhost:3000/api/users/login"
+  VITE_USERS_REGISTER="http://localhost:3000/api/users/register"
+  VITE_USERS_SAVE_PICTURE="http://localhost:3000/api/users/save"
+  VITE_USERS_DELETE_SAVE_PICTURE="http://localhost:3000/api/users/delete-saved-picture"
+  ```
+
 
 ## Ejecución del Proyecto
 
