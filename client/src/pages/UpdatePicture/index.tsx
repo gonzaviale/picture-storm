@@ -24,7 +24,7 @@ const UpdatePicture: React.FC<{ id: string, picture: Picture }> = ({ id, picture
                     showConfirmButton: false,
                     timer: 1500,
                 }).then(() => {
-                    navigate('/my-pictures');
+                    navigate('/');
                 });
             }
         } catch (error) {
