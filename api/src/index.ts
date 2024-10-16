@@ -6,6 +6,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import connectDataBase from './config/db';
 import router from './routes';
+import { setupSwagger } from './docs/swagger';
 
 connectDataBase();
 
@@ -20,6 +21,8 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+setupSwagger(app);
 
 app.use('/api', router);
 
