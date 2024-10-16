@@ -92,7 +92,7 @@ const MyPictures: React.FC = () => {
             <>
               {pictures.length === 0 ? (
                 <div className="flex justify-center items-center h-20 mt-4">
-                  <h1 className="text-2xl font-bold">No tienes ninguna imagen guardada</h1>
+                  <h1 className="text-2xl font-bold">No has creado ninguna imagen</h1>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 w-full max-w-7xl">
