@@ -3,12 +3,14 @@ import { createPicture } from "../../api/pictureApi";
 import Header from "../../layout/Header";
 import React, { useState } from "react";
 import HeroImage from "../../components/HeroImage";
+import { useNavigate } from "react-router-dom";
 
 const CreatePicture: React.FC = () => {
     const [description, setDescription] = useState('');
     const [altDescription, setAltDescription] = useState('');
     const [image, setImage] = useState('');
     const [color, setColor] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,7 +24,7 @@ const CreatePicture: React.FC = () => {
                     showConfirmButton: false,
                     timer: 1500,
                 }).then(() => {
-                    window.location.href = '/';
+                    navigate('/');
                 })
             }
         } catch (error) {

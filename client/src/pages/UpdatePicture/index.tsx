@@ -2,12 +2,14 @@ import Swal from "sweetalert2";
 import { updatePicture } from "../../api/pictureApi";
 import React, { useState } from "react";
 import { Picture } from "../../types";
+import { useNavigate } from "react-router-dom";
 
 const UpdatePicture: React.FC<{ id: string, picture: Picture }> = ({ id, picture }) => {
     const [description, setDescription] = useState(picture.description);
     const [altDescription, setAltDescription] = useState(picture.altDescription);
     const [image, setImage] = useState(picture.image);
     const [color, setColor] = useState(picture.color);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,7 +24,7 @@ const UpdatePicture: React.FC<{ id: string, picture: Picture }> = ({ id, picture
                     showConfirmButton: false,
                     timer: 1500,
                 }).then(() => {
-                    window.location.href = '/my-pictures';
+                    navigate('/my-pictures');
                 });
             }
         } catch (error) {

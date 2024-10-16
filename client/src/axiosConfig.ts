@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom";
 
 
 axios.interceptors.request.use(
@@ -18,6 +19,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => response,
   error => {
+    const navigate = useNavigate();
     if (error.response.status === 401 || error.response.status === 400) {
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('username');
@@ -27,7 +29,7 @@ axios.interceptors.response.use(
         icon: 'warning',
         confirmButtonText: 'Iniciar sesión'
       }).then(() => {
-        window.location.href = '/login';
+        navigate('/login');
       });
     }
     return Promise.reject(error);

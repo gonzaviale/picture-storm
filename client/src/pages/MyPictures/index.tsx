@@ -9,12 +9,14 @@ import UpdatePicture from "../UpdatePicture";
 import PictureCard from "../../components/PictureCard";
 import HeroImage from "../../components/HeroImage";
 import Header from "../../layout/Header";
+import { useNavigate } from "react-router-dom";
 
 const MyPictures: React.FC = () => {
   const [pictures, setPictures] = useState<Picture[]>([]);
   const [selectedPicture, setSelectedPicture] = useState<Picture | null>(null);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [paginationResponse, setPaginationResponse] = useState<PaginateResponse | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPictures = async () => {
@@ -48,7 +50,7 @@ const MyPictures: React.FC = () => {
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
-        window.location.reload();
+        navigate('/my-pictures');
       });
     } catch (error) {
       console.error('Error deleting picture:', error);

@@ -7,12 +7,14 @@ import Swal from 'sweetalert2';
 import PictureCard from "../../components/PictureCard";
 import HeroImage from "../../components/HeroImage";
 import Header from "../../layout/Header";
+import { useNavigate } from "react-router-dom";
 
 
 const MySavedPictures: React.FC = () => {
   const [pictures, setPictures] = useState<Picture[]>([]);
   const [paginationResponse, setPaginationResponse] = useState<PaginateResponse | null>(null);
   const [selectedPicture, setSelectedPicture] = useState<Picture | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPictures = async () => {
@@ -94,7 +96,7 @@ const MySavedPictures: React.FC = () => {
                           showConfirmButton: false,
                           timer: 1500,
                         }).then(() => {
-                          window.location.reload();
+                          navigate('/saved-pictures');
                         });
                       }}
                     >

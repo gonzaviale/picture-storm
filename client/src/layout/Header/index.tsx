@@ -21,7 +21,7 @@ const Header: React.FC = () => {
                 <div className='relative'>
                     <button
                         className="p-2"
-                        onClick={() => window.location.href = '/'}
+                        onClick={() => navigate('/')}
                     >
                         <HomeIcon className="h-6 w-6 text-white" aria-hidden="true" />
                     </button>
