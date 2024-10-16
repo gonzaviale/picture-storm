@@ -50,6 +50,7 @@ const MyPictures: React.FC = () => {
         showConfirmButton: false,
         timer: 1500,
       }).then(() => {
+        navigate('/my-pictures');
         navigate(0);
       });
     } catch (error) {

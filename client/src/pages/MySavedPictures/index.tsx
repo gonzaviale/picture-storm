@@ -96,6 +96,7 @@ const MySavedPictures: React.FC = () => {
                           showConfirmButton: false,
                           timer: 1500,
                         }).then(() => {
+                          navigate('/saved-pictures');
                           navigate(0);
                         });
                       }}
