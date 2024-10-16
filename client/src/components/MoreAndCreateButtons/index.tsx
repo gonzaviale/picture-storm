@@ -1,21 +1,24 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const MoreAndCreateButtons: React.FC = () => {
+
+    const navigate = useNavigate();
 
 
     const handleExternalApi = () => {
         if (sessionStorage.getItem('token')) {
-            window.location.href = '/external-pictures';
+            navigate('/external-pictures');
         } else {
-            window.location.href = '/login';
+            navigate('/login');
         }
     }
 
     const handleCreatePicture = () => {
         if (sessionStorage.getItem('token')) {
-            window.location.href = '/create-picture';
+            navigate('/create-picture');
         } else {
-            window.location.href = '/login';
+            navigate('/login');
         }
     }
     return (
